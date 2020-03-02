@@ -1,3 +1,5 @@
+//The content below is how Classes used to work up until 2015
+
 /*
 A class defines the shape of a type of object—what methods and properties
  it has. Such an object is called an instance of the class.
