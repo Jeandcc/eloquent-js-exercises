@@ -2,6 +2,10 @@
 A map (noun) is a data structure that associates values (the keys) with other
 values. For example, you might want to map names to ages. It is possible to use
 objects for this.
+
+We should use maps over objects when we need to do several operations on the
+data that we're storing, when we need fast code or when we need the keys for the
+contents to be something different than strings or integers.
 */
 
 let ages = {
@@ -32,7 +36,8 @@ console.log("toString" in Object.create(null));
 
 /*
 Fortunately, JavaScript comes with a class called Map that is written for this
-exact purpose. It stores a mapping and allows any type of keys.
+exact purpose (having keys that aren't only strings or integers). It stores a
+mapping and allows any type of keys.
 */
 let ages = new Map();
 ages.set("Boris", 39);
