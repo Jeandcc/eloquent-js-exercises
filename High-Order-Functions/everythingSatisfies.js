@@ -7,12 +7,12 @@ function every(array, test) {
 }
 
 function every2(array, test) {
-  if (array.some(test)) return true;
+  return !array.some(element => !test(element));
 }
 
-console.log(every([1, 3, 5], n => n < 10));
+console.log(every2([1, 3, 5], n => n < 10));
 // → true
-console.log(every([2, 4, 16], n => n < 10));
+console.log(every2([2, 4, 16], n => n < 10));
 // → false
-console.log(every([], n => n < 10));
+console.log(every2([], n => n < 10));
 // → true
