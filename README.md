@@ -1,1 +1,1 @@
-# eloquente-js-exercises
+# Eloquent JS Exercises
