@@ -39,7 +39,8 @@ class Group {
   }
 }
 
-/* ANOTHER POSSIBLE SOLUTION BELOW */
+/* ANOTHER POSSIBLE SOLUTION BELOW, CREATING A CLASS FOR THE ITERATOR SYMBOL*/
+
 class Group {
   constructor() {
     this.members = [];
