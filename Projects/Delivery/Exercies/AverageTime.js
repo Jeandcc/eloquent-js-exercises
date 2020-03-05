@@ -33,8 +33,6 @@ function buildGraph(edges) {
 
 const roadGraph = buildGraph(roads);
 
-// console.log(roadGraph);
-
 class VillageState {
   constructor(place, parcels) {
     this.place = place;
@@ -61,11 +59,6 @@ let first = new VillageState("Post Office", [
 ]);
 let next = first.move("Alice's House");
 
-/*
-  Because we want robots to be able to remember things, so that they can make and
-  execute plans, we also pass them their memory and allow them to return a new
-  memory.
-  */
 function runRobot(state, robot, memory) {
   for (let turn = 0; ; turn++) {
     if (state.parcels.length == 0) {
@@ -102,16 +95,7 @@ VillageState.random = function(parcelCount = 5) {
   return new VillageState("Post Office", parcels);
 };
 
-//Creating the same envrironment to test the random bot against the robot that
-//makes  a plan
 const testEnvironment = VillageState.random();
-
-runRobot(testEnvironment, randomRobot);
-
-// 🔽🔽🔽🔽🔽🔽🔽🔽🔽🔽🔽 IMPROVING Robot's speed by defining a route that
-// passes through all places in the village. That way, the robot can run that
-// route twice, at which point it is guaranteed to pickup and deliver all
-// parcels.
 
 const mailRoute = [
   "Alice's House",
@@ -136,27 +120,6 @@ function routeRobot(state, memory) {
   return { direction: memory[0], memory: memory.slice(1) };
 }
 
-runRobot(testEnvironment, routeRobot, []);
-
-/* 🔽🔽🔽🔽🔽🔽🔽🔽🔽🔽🔽 Improving the robot once again, by only moving
-  torwards places that need something picked up or deliver. To do that, we`ll need
-  to use some sort of route finding route.
-  
-  When searching for a route from A to B, we are interested only in the ones that
-  start at A. We also don’t care about routes that visit the same place
-  twice—those are definitely not the most efficient route anywhere.
-  
-  We are mostly interested in the shortest route: A good approach would be to
-  “grow” routes from the starting point, exploring every reachable place that
-  hasn’t been visited yet, until a route reaches the goal.
-  
-  Here is a function that does this:
-  
-  The exploring has to be done in the right order—the places that were reached
-  first have to be explored first. We can’t immediately explore a place as soon as
-  we reach it because that would mean places reached from there would also be
-  explored immediately
-  */
 function findRoute(graph, from, to) {
   let work = [{ at: from, route: [] }];
   for (let i = 0; i < work.length; i++) {
@@ -181,8 +144,6 @@ function goalOrientedRobot({ place, parcels }, route) {
   }
   return { direction: route[0], memory: route.slice(1) };
 }
-
-runRobot(testEnvironment, goalOrientedRobot, []);
 
 function compareRobots(robot1, memory1, robot2, memory2) {
   const robot1Times = [];
