@@ -33,15 +33,24 @@ function buildGraph(edges) {
 
 const roadGraph = buildGraph(roads);
 
-function randomPick(array) {
-  let choice = Math.floor(Math.random() * array.length);
-  return array[choice];
-}
-
 class VillageState {
   constructor(place, parcels) {
     this.place = place;
     this.parcels = parcels;
+  }
+
+  move(destination) {
+    if (!roadGraph[this.place].includes(destination)) {
+      return this;
+    } else {
+      let parcels = this.parcels
+        .map(p => {
+          if (p.place != this.place) return p;
+          return { place: destination, address: p.address };
+        })
+        .filter(p => p.place != p.address);
+      return new VillageState(destination, parcels);
+    }
   }
 
   static random(parcelCount = 5) {
@@ -56,23 +65,10 @@ class VillageState {
     }
     return new VillageState("Post Office", parcels);
   }
-
-  move(destination) {
-    if (!roadGraph[this.place].includes(destination)) {
-      return this;
-    } else {
-      let parcels = this.parcels
-        .map(p => {
-          if (p.place != this.place) return p;
-          return { place: destination, address: p.address };
-        })
-        .filter(p => {
-          p.place != p.address;
-        });
-
-      return new VillageState(destination, parcels);
-    }
-  }
+}
+function randomPick(array) {
+  let choice = Math.floor(Math.random() * array.length);
+  return array[choice];
 }
 
 function findRoute(graph, from, to) {
@@ -100,4 +96,46 @@ function goalOrientedRobot({ place, parcels }, route) {
   return { direction: route[0], memory: route.slice(1) };
 }
 
-function runRobot(state, robot, memory) {}
+function compareRobots(robot1, memory1, robot2, memory2) {
+  const robot1Times = [];
+  const robot2Times = [];
+
+  for (let index = 0; index < 100; index++) {
+    const situation = VillageState.random();
+
+    robot1Times.push(runRobot(situation, robot1, memory1));
+    robot2Times.push(runRobot(situation, robot2, memory2));
+  }
+
+  function getAverage(array) {
+    const sum = array.reduce(function(total, elem) {
+      return total + elem;
+    });
+
+    return sum / array.length;
+  }
+
+  const times = {
+    robot1: getAverage(robot1Times),
+    robot2: getAverage(robot2Times)
+  };
+
+  return times;
+}
+
+//compareRobots(routeRobot, [], goalOrientedRobot, []);
+runRobot(VillageState.random(), goalOrientedRobot, []);
+
+function runRobot(state, robot, memory) {
+  for (let turn = 0; ; turn++) {
+    if (state.parcels.length == 0) {
+      console.log(`Done in ${turn} turns`);
+      return turn;
+      break;
+    }
+    let action = robot(state, memory);
+    state = state.move(action.direction);
+    memory = action.memory;
+    //console.log(`Moved to ${action.direction}`);
+  }
+}
