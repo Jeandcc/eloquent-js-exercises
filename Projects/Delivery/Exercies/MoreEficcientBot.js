@@ -57,20 +57,20 @@ class VillageState {
     return new VillageState("Post Office", parcels);
   }
 
-  move(destination) {
-    if (!roadGraph[this.place].includes(destination)) {
+  move(newPlace) {
+    if (!roadGraph[this.place].includes(newPlace)) {
       return this;
     } else {
       let parcels = this.parcels
         .map(p => {
           if (p.place != this.place) return p;
-          return { place: destination, address: p.address };
+          return { place: newPlace, address: p.address };
         })
         .filter(p => {
-          p.place != p.address;
+          return p.place != p.address;
         });
 
-      return new VillageState(destination, parcels);
+      return new VillageState(newPlace, parcels);
     }
   }
 }
@@ -100,4 +100,16 @@ function goalOrientedRobot({ place, parcels }, route) {
   return { direction: route[0], memory: route.slice(1) };
 }
 
-function runRobot(state, robot, memory) {}
+function runRobot(state, robot, memory) {
+  for (let turn = 0; ; turn++) {
+    if (state.parcels.length == 0) {
+      console.log(`Done in ${turn} turns`);
+      return turn;
+    }
+    let action = robot(state, memory);
+    state = state.move(action.direction);
+    memory = action.memory;
+  }
+}
+
+runRobot(VillageState.random(), goalOrientedRobot, []);
