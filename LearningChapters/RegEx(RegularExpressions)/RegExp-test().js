@@ -12,3 +12,8 @@ If a REGEX pattern only consists of 'non-special' characters, it will return
 true if it finds a match following the same order anywhere in the string
 */
 console.log(/abc/.test("dsdsabcds")); // → true
+
+/*
+Finding out whether a string contains abc could just as well be done with a call
+to indexOf. Regular expressions allow us to express more complicated patterns.
+*/
