@@ -17,7 +17,7 @@ console.log(match); // → ["100"]
 console.log(match.index); // → 8
 
 /*
-Strings values also has a method that behaves similarly
+Strings values also has a method "match" that behaves similarly
 */
 console.log("one two 100".match(/\d+/)); // → ["100"]
 
