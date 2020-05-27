@@ -1,1 +1,1 @@
-# Eloquent JS Exercises
+# Eloquent JS
